@@ -1,0 +1,148 @@
+# Embedding Python Package
+
+The `Embedding` package is a utility for generating question-answer pairs and embeddings from HTML pages or text input. It utilizes the OpenAI API to generate question-answer pairs and embeddings. This package is useful for generating training data for chatbots or question-answering models.
+
+## Constructor Options
+
+The `Embedding` class can be instantiated with the following options:
+
+- `api_key` (required): Your OpenAI API key.
+- `embedding_model` (optional, default: "text-embedding-ada-002"): The name of the OpenAI model to use for generating embeddings.
+- `completion_model` (optional, default: "text-davinci-003"): The name of the OpenAI model to use for generating question-answer pairs.
+- `completion_model_options` (optional, default: `{ max_tokens: 2000, n: 1, stop: null, temperature: 0.7 }`): The options to pass to the completion model when generating question-answer pairs.
+- `screenshot_api_key` (optional): Your Pagepixels Screenshot API key (https://pagepixels.com), used for scraping HTML from webpages.
+- `screenshot_options` (optional, default: `{}`): The options to pass to the Pagepixels Screenshot API when scraping HTML.
+- `chunk_max_tokens` (optional, default: 800): The maximum number of tokens to send to the OpenAI API at once.
+- `prompt_refinement` (optional, default: ""): Any prompt refinement you would like to add to the completion prompt.
+- `verbose` (optional, default: False): Whether or not to output additional logging information during processing.
+
+## Usage
+
+The `Embedding` class provides several methods for generating embeddings and question-answer pairs. These methods can be used standalone or in combination to generate embeddings and question-answer pairs from HTML pages or text input.
+
+### `generate_qa_embeddings_from_text` Method
+
+The `generate_qa_embeddings_from_text` method takes a string of text and generates embeddings and question-answer pairs from it. The method returns an array of dictionaries, each containing the original question-answer pair along with the corresponding embedding.
+
+```python
+from embeddings_util import EmbeddingsUtil
+
+options = {
+  "api_key": "your_api_key",
+  "verbose": True
+}
+
+embedding_client = EmbeddingsUtil(**options)
+
+text = "Welcome to our documentation. This guide will walk you through the basics of using our platform."
+
+embeddings_result = embedding_client.generate_qa_embeddings_from_text(text)
+
+print(embeddings_result)
+```
+
+### `generate_qa_embeddings_from_urls` Method
+
+The `generate_qa_embeddings_from_urls` method takes a list of URLs and generates embeddings and question-answer pairs from the text content of the pages at those URLs. The method takes screenshots of the web pages using the Pagepixels API and extracts the text content from the resulting HTML. The method returns an array of dictionaries, each containing the original question-answer pair along with the corresponding embedding and the URL of the page from which it was generated.
+
+```python
+from embeddings_util import EmbeddingsUtil
+
+options = {
+  "api_key": "your_api_key",
+  "screenshot_api_key": "your_screenshot_api_key",
+  "verbose": True
+}
+
+embedding_client = EmbeddingsUtil(**options)
+
+urls = ["https://www.example.com", "https://www.example.com/about"]
+
+embeddings_result = embedding_client.generate_qa_embeddings_from_urls(urls)
+
+print(embeddings_result)
+```
+
+### `generate_qa_embeddings_from_qa_pairs` Method
+
+The `generate_qa_embeddings_from_qa_pairs` method takes an array of question-answer pairs and generates embeddings for the questions. The method returns an array of objects, each containing the original question-answer pair along with the corresponding embedding.
+
+```python
+from typing import List, Dict, Union
+from embeddings_util import EmbeddingsUtil
+
+options = {
+  "api_key": "your_api_key",
+  "verbose": True
+}
+
+embedding_client = EmbeddingsUtil(**options)
+
+qa_pairs = [
+  {
+    "question": "What is the purpose of this documentation?",
+    "answer": "To guide users through the basics of using the platform."
+  }
+]
+
+embeddings_result = embedding_client.generate_qa_embeddings_from_qa_pairs(qa_pairs)
+
+print(embeddings_result)
+```
+
+### `generate_qa_embeddings_from_text` Method
+
+The `generate_qa_embeddings_from_text` method takes a string of text and generates question-answer pairs and embeddings from it. The method returns an array of objects, each containing the original question-answer pair along with the corresponding embedding.
+
+```python
+from typing import List, Dict, Union
+from embeddings_util import EmbeddingsUtil
+
+options = {
+  "api_key": "your_api_key",
+  "verbose": True
+}
+
+embedding_client = EmbeddingsUtil(**options)
+
+text = "Welcome to our documentation. This guide will walk you through the basics of using our platform."
+
+embeddings_result = embedding_client.generate_qa_embeddings_from_text(text)
+
+print(embeddings_result)
+```
+
+## generate_embedding_for_text Method
+
+The `generate_embedding_for_text` method takes a string of text and generates an embedding for it. The method returns the generated embedding as a list of floats.
+
+```python
+def generate_embedding_for_text(self, text: str) -> List[float]:
+    """
+    Generates an embedding for a given text using the OpenAI API.
+
+    Args:
+        text (str): The text to generate an embedding for.
+
+    Returns:
+        List[float]: The generated embedding as a list of floats.
+    """
+    try:
+        embedding = self.openai_call(text, "/v1/embeddings", self.embedding_model)
+        return embedding
+    except Exception as e:
+        print(f"Error generating embedding: {e}")
+        return []
+```
+
+**Parameters**
+- `text` (str): The text to generate an embedding for.
+
+**Returns**
+- `List[float]`: The generated embedding as a list of floats.
+
+This method uses the `openai_call` method to send a request to the OpenAI API to generate an embedding for the given text. If successful, the method returns the generated embedding as a list of floats. If there is an error generating the embedding, an empty list is returned and an error message is printed to the console.
+
+## Conclusion
+
+The `Embedding` package provides a convenient way to generate question-answer pairs and embeddings from HTML pages or text input using the OpenAI API. By using the methods provided by the package, it is easy to generate training data for chatbots or question-answering models. The available constructor options provide flexibility for customizing the behavior of the package.

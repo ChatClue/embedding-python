@@ -1,0 +1,10 @@
+LICENSE.txt
+README.md
+setup.py
+embeddings_util/__init__.py
+embeddings_util/embeddings_util.py
+embeddings_util.egg-info/PKG-INFO
+embeddings_util.egg-info/SOURCES.txt
+embeddings_util.egg-info/dependency_links.txt
+embeddings_util.egg-info/requires.txt
+embeddings_util.egg-info/top_level.txt

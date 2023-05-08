@@ -1,0 +1,3 @@
+requests
+screenshots_pagepixels
+bs4
